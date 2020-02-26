@@ -1,0 +1,2 @@
+export const SET_FETCHING_DATA = "home/SET_FETCHING_DATE";
+export type SET_FETCHING_DATA = typeof SET_FETCHING_DATA;

@@ -1,0 +1,27 @@
+@mixin font-size($size: medium) {
+  @if ($size == x-small) {
+    font-size: 10px;
+  } @else if $size == small {
+    font-size: 14px;
+  } @else if $size == medium {
+    font-size: 18px;
+  } @else if $size == large {
+    font-size: 22px;
+  } @else if $size == x-large {
+    font-size: 26px;
+  } @else {
+    font-size: 18px;
+  }
+}
+
+@mixin font-weight($weight: normal) {
+  @if ($weight == light) {
+    font-weight: 200;
+  } @else if($weight == normal) {
+    font-weight: 400;
+  } @else if($weight == bold) {
+    font-weight: 600;
+  } @else {
+    font-weight: 400;
+  }
+}

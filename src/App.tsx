@@ -1,6 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import logo from "./logo.svg";
+import "./App.css";
+import { RouteHeader } from "./modules/common";
+import { Home } from "./modules";
 
 function App() {
   return (
@@ -22,5 +25,22 @@ function App() {
     </div>
   );
 }
+
+const ROUTES = [{ label: "Home", path: "/home" }];
+
+export const RoutedApp = () => (
+  <BrowserRouter>
+    <Route
+      path="*"
+      render={props => <RouteHeader {...{ ...props, routes: ROUTES }} />}
+    />
+    <Switch>
+      <Route path="/home" component={Home.Home} />
+      <Route path="*">
+        <App />
+      </Route>
+    </Switch>
+  </BrowserRouter>
+);
 
 export default App;

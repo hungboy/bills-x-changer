@@ -1,0 +1,15 @@
+.route-header-component {
+  display: grid;
+  grid-template-columns: auto;
+  column-gap: 10px;
+  margin: 10px; }
+  .route-header-component .route-tab-component {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px; }
+    .route-header-component .route-tab-component.selected .label {
+      text-decoration: underline; }
+    .route-header-component .route-tab-component .label {
+      text-decoration: none;
+      cursor: pointer; }
