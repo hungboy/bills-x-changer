@@ -1,0 +1,1 @@
+export { watchFetchLatestData } from "./fetchLatest";
