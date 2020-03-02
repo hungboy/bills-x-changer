@@ -23,6 +23,13 @@ import {
 const URL = "/v1/latest";
 const { openaqURL } = configs;
 
+export interface IFetchLatestByDestinationParams {
+  city: City;
+  parameter?: Parameter;
+  country: Country;
+  location?: Location;
+}
+
 export interface IFetchLatestParams {
   city?: City;
   parameter?: Parameter;
@@ -73,7 +80,7 @@ export const fetchLatest = async (
 ): Promise<IFetchLatestResponseBody> => {
   const requestConfigs = {
     baseURL: openaqURL,
-    params
+    params: { ...params, has_geo: true }
   };
   const { body }: { body: IFetchLatestResponseBody } = await axios.get(
     URL,

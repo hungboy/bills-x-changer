@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { RouteHeader } from "./modules/common";
-import { Home } from "./modules";
+import { Home, AirQuality } from "./modules";
 
 const ROUTES = [{ label: "Home", path: "/home" }];
 
@@ -12,6 +12,7 @@ const App = () => (
       render={props => <RouteHeader {...{ ...props, routes: ROUTES }} />}
     />
     <Switch>
+      <Route path="/air-quality" component={AirQuality.AirQuality} />
       <Route path="/*" component={Home.Home} />
     </Switch>
   </BrowserRouter>

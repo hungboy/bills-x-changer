@@ -8,3 +8,6 @@ export const getFetchLatestDataFailure = (state: IStoreState) =>
 
 export const getFetchLatestDataPageFailure = (state: IStoreState) =>
   state.airQuality.fetchLatestDataPageFailure;
+
+export const getIsFetchingLatestData = (state: IStoreState) =>
+  state.airQuality.isFetchingLatestData;

@@ -2,7 +2,7 @@ import { Dispatch, Middleware, MiddlewareAPI, Action } from "redux";
 
 export const crashReporterMiddleware: Middleware = ({
   getState
-}: MiddlewareAPI) => (next: Dispatch) => action => {
+}: MiddlewareAPI) => (next: Dispatch) => (action: Action) => {
   try {
     return next(action);
   } catch (e) {

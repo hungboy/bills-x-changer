@@ -1,12 +1,4 @@
-import {
-  takeLatest,
-  take,
-  takeEvery,
-  putResolve,
-  put,
-  all,
-  call
-} from "redux-saga/effects";
+import { takeEvery, put, all, call } from "redux-saga/effects";
 import {
   IFetchLatestData,
   fetchLatestDataPage,
@@ -19,12 +11,10 @@ import { FETCH_LATEST_DATA } from "../types";
 import {
   fetchLatest,
   IFetchLatestParams,
-  IFetchLatestResponseBody,
-  IFetchLatestMeta,
-  IFetchLatestResult
+  IFetchLatestResponseBody
 } from "../../api/fetchLatest";
 
-export function* fetchLatestData({ type, payload }: IFetchLatestData) {
+export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
   try {
     const results: null | IFetchLatestResponseBody = yield call(
       fetchLatestPage,
@@ -76,19 +66,19 @@ export function* fetchLatestPage(params: IFetchLatestParams) {
     const {
       meta,
       results: latestResults
-    }: IFetchLatestResponseBody = yield call(fetchLatestDataPage, params);
+    }: IFetchLatestResponseBody = yield call(fetchLatest, params);
 
     yield put(fetchLatestDataPageSuccess({ latestResults }));
 
     return { meta, results: latestResults };
   } catch (e) {
     console.log("FetchLatestDataPage Failure:", params);
-    yield put(fetchLatestDataFailure());
+    yield put(fetchLatestDataPageFailure());
 
     return null;
   }
 }
 
 export function* watchFetchLatestData() {
-  takeEvery(FETCH_LATEST_DATA, fetchLatestData);
+  yield takeEvery(FETCH_LATEST_DATA, fetchLatestData);
 }

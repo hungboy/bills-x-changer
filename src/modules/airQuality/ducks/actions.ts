@@ -1,5 +1,6 @@
 import * as actionTypes from "./types";
 import { IFetchLatestResult, IFetchLatestParams } from "../api/fetchLatest";
+import { Coordinates, Radius } from "../interfaces/types";
 export interface ISetIsFetchingData {
   type: actionTypes.SET_IS_FETCHING_DATA;
   payload: { isFetchingData: boolean };
@@ -12,22 +13,30 @@ export const setIsFetchingData = (
   payload: { isFetchingData }
 });
 
-export interface IFetchLatestDataArgs {
-  city?: string;
-  country?: string;
-  location?: string;
+export interface IFetchLatestDataByCoordinatesArgs {
+  coordinates: Coordinates;
+  radius: Radius;
 }
+
+export interface IFetchLatestDataByCoordinates {
+  type: actionTypes.FETCH_LATEST_DATA;
+  payload: IFetchLatestDataByCoordinatesArgs;
+}
+
+export const fetchLatestDataByCoordinates = (
+  payload: IFetchLatestDataByCoordinatesArgs
+): IFetchLatestDataByCoordinates => ({
+  type: actionTypes.FETCH_LATEST_DATA,
+  payload
+});
 
 export interface IFetchLatestData {
   type: actionTypes.FETCH_LATEST_DATA;
-  payload: IFetchLatestDataArgs;
+  payload?: IFetchLatestParams;
 }
 
-export const fetchLatestData = (
-  payload: IFetchLatestDataArgs
-): IFetchLatestData => ({
-  type: actionTypes.FETCH_LATEST_DATA,
-  payload
+export const fetchLatestData = (): IFetchLatestData => ({
+  type: actionTypes.FETCH_LATEST_DATA
 });
 
 export interface IFetchLatestDataSuccess {
