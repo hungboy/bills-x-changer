@@ -23,7 +23,6 @@ export const AirQuality = ({
   fetchLatestDataPageFailure,
   ...routeProps
 }: IAirQualityProps) => {
-  debugger;
   return (
     <Switch>
       <ProtectedRoute

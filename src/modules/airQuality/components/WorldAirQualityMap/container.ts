@@ -6,15 +6,19 @@ import {
   getIsFetchingLatestData,
   getLatestData
 } from "../../ducks/selectors";
+import { fetchLatestData } from "../../ducks/actions";
 import { WorldAirQualityMap } from "./component";
 
 export const mapStateToProps = (state: IStoreState) => ({
-  isFetchingLatestData: getFetchLatestDataFailure(state),
+  isFetchingLatestData: getIsFetchingLatestData(state),
   fetchLatestDataFailure: getFetchLatestDataPageFailure(state),
   fetchLatestDataPageFailure: getIsFetchingLatestData(state),
   latestData: getLatestData(state)
 });
 
-export const ConnectedWorldAirQualityMap = connect(mapStateToProps)(
-  WorldAirQualityMap
-);
+export const dispatchMap = { fetchLatestData };
+
+export const ConnectedWorldAirQualityMap = connect(
+  mapStateToProps,
+  dispatchMap
+)(WorldAirQualityMap);

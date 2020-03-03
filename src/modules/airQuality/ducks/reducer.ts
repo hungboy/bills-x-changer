@@ -33,8 +33,8 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
     case actionTypes.FETCH_LATEST_DATA:
       return {
         ...state,
-        isFetchingLatestData: true,
-        ...initialAirQualityLatestResultsState
+        ...initialAirQualityLatestResultsState,
+        isFetchingLatestData: true
       };
 
     case actionTypes.FETCH_LATEST_DATA_SUCCESS:
@@ -63,7 +63,11 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
         fetchLatestDataPageFailure: true
       };
 
+    case actionTypes.FETCH_LATEST_DATA_PAGE:
+      return { ...state };
+
     default:
+      //Reset state when accessing another portion of the app
       return { ...initialState };
   }
 };

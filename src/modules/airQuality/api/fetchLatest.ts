@@ -80,12 +80,13 @@ export const fetchLatest = async (
 ): Promise<IFetchLatestResponseBody> => {
   const requestConfigs = {
     baseURL: openaqURL,
-    params: { ...params, has_geo: true }
+    params: { ...params, has_geo: true, limit: 1000 }
   };
-  const { body }: { body: IFetchLatestResponseBody } = await axios.get(
+
+  const { data }: { data: IFetchLatestResponseBody } = await axios.get(
     URL,
     requestConfigs
   );
 
-  return body;
+  return data;
 };
