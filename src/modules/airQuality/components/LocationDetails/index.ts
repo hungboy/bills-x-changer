@@ -1,7 +1,6 @@
-import { ILocationQueryStringProps } from "./component";
-import queryString from "query-string";
-import { RouteComponentProps } from "react-router-dom";
-export { ConnectedLocationDetails as LocationDetails } from "./container";
+import queryString from 'query-string';
+import { RouteComponentProps } from 'react-router-dom';
+export { ConnectedLocationDetails as LocationDetails } from './container';
 
 export const routePredicate = (props: RouteComponentProps) => {
   const { city, coordinates, country, location } = queryString.parse(

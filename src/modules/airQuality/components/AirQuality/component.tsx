@@ -1,15 +1,12 @@
-import React from "react";
-import { Switch, Route, RouteComponentProps } from "react-router-dom";
-import { ProtectedRoute } from "../../../common";
-import { WorldAirQualityMap } from "../WorldAirQualityMap";
+import React from 'react';
+import { Switch, Route, RouteComponentProps } from 'react-router-dom';
+import { ProtectedRoute } from '../../../common';
+import { WorldAirQualityMap } from '../WorldAirQualityMap';
 import {
   LocationDetails,
   routePredicate as locationRoutePredicate
-} from "../LocationDetails";
-import { ILocationQueryStringProps } from "../LocationDetails/component";
-import { LoadingSpinner } from "../../../common";
-import queryString from "query-string";
-import "./styles.scss";
+} from '../LocationDetails';
+import './styles.scss';
 
 export interface IAirQualityProps extends RouteComponentProps {
   isFetchingLatestData: boolean;
@@ -23,16 +20,22 @@ export const AirQuality = ({
   fetchLatestDataPageFailure,
   ...routeProps
 }: IAirQualityProps) => {
+  const LOCATION_DETAILS_PATH = `${routeProps.match.path}/location-details`;
+
   return (
     <Switch>
       <ProtectedRoute
-        path={`${routeProps.match.path}/location-details`}
+        path={LOCATION_DETAILS_PATH}
         component={LocationDetails}
         redirectPath={routeProps.match.path}
         predicate={locationRoutePredicate}
         {...routeProps}
       />
-      <Route path="*" exact component={WorldAirQualityMap} />
+      <Route
+        path="*"
+        exact
+        render={props => <WorldAirQualityMap {...props} />}
+      />
     </Switch>
   );
 };

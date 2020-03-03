@@ -1,6 +1,6 @@
-import axios from "axios";
-import { configs } from "../api";
-import { Parameter, Sort } from "../interfaces/constants";
+import axios from 'axios';
+import { configs } from '../api';
+import { Parameter, Sort } from '../interfaces/constants';
 import {
   City,
   Country,
@@ -18,9 +18,9 @@ import {
   LastUpdated,
   Unit,
   SourceName
-} from "../interfaces/types";
+} from '../interfaces/types';
 
-const URL = "/v1/latest";
+const URL = '/v1/latest';
 const { openaqURL } = configs;
 
 export interface IFetchLatestByDestinationParams {
@@ -80,7 +80,7 @@ export const fetchLatest = async (
 ): Promise<IFetchLatestResponseBody> => {
   const requestConfigs = {
     baseURL: openaqURL,
-    params: { ...params, has_geo: true, limit: 1000 }
+    params: { ...params, has_geo: true, limit: 2000 }
   };
 
   const { data }: { data: IFetchLatestResponseBody } = await axios.get(

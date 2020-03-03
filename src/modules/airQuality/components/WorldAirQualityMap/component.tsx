@@ -1,15 +1,16 @@
-import React from "react";
-import { IFetchLatestResult } from "../../api/fetchLatest";
-import { LoadingSpinner } from "../../../common";
+import React, { useEffect } from 'react';
+import { IFetchLatestResult } from '../../api/fetchLatest';
+import { LoadingSpinner } from '../../../common';
 
 export interface IWorldAirQualityMapProps
-  extends IWorldAIrQualityMapDispatches {
+  extends IWorldAirQualityMapDispatches {
   isFetchingLatestData: boolean;
   fetchLatestDataFailure: boolean;
   fetchLatestDataPageFailure: boolean;
   latestData: IFetchLatestResult[] | null;
 }
-export interface IWorldAIrQualityMapDispatches {
+
+export interface IWorldAirQualityMapDispatches {
   fetchLatestData: () => void;
 }
 
@@ -17,17 +18,20 @@ export const WorldAirQualityMap = ({
   isFetchingLatestData,
   fetchLatestDataFailure,
   fetchLatestDataPageFailure,
-  latestData,
-  fetchLatestData
+  fetchLatestData,
+  latestData
 }: IWorldAirQualityMapProps) => {
-  React.useEffect(() => {
-    fetchLatestData();
-  }, []);
-  debugger;
+  useEffect(() => {
+    const onMount = () => {
+      fetchLatestData();
+    };
+    onMount();
+  }, [fetchLatestData]);
+
   return (
     <div className="world-air-quality-map">
       {isFetchingLatestData && (
-        <LoadingSpinner classes={["world-air-quality-map__loading-spinner"]} />
+        <LoadingSpinner classes={['world-air-quality-map__loading-spinner']} />
       )}
 
       <div className="world-air-quality-map__map"> MAP PLACEHOLDER</div>
