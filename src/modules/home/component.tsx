@@ -1,6 +1,6 @@
 import React from "react";
 import { LoadingSpinner } from "../common";
-import "./styles.css";
+import "./styles.scss";
 
 export const Home = () => (
   <div className="home-root">

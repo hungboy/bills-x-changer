@@ -1,7 +1,0 @@
-.air-quality {
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-
-.air-quality__loading-spinner div {
-  background: purple; }

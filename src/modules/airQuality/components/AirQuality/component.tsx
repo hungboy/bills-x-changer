@@ -9,7 +9,7 @@ import {
 import { ILocationQueryStringProps } from "../LocationDetails/component";
 import { LoadingSpinner } from "../../../common";
 import queryString from "query-string";
-import "./styles.css";
+import "./styles.scss";
 
 export interface IAirQualityProps extends RouteComponentProps {
   isFetchingLatestData: boolean;

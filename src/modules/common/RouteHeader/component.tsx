@@ -2,7 +2,7 @@ import React from "react";
 import { RouteChildrenProps } from "react-router-dom";
 import * as H from "history";
 import clsx from "clsx";
-import "./styles.css";
+import "./styles.scss";
 
 export interface IRouteHeaderProps extends RouteChildrenProps {
   routes: IRouteTab[];

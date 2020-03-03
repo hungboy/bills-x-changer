@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import "./styles.css";
+import "./styles.scss";
 
 export interface ILoadingSpinnerProps {
   classes?: string[];
