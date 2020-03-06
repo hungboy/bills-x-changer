@@ -1,7 +1,10 @@
 export type City = string;
 export type Country = string;
 export type Location = string;
+export type Longitude = number;
+export type Latitude = number;
 export type Coordinates = string;
+export type CoordinatesObject = { longitude: Longitude; latitude: Latitude };
 export type Radius = number;
 export type Distance = number;
 

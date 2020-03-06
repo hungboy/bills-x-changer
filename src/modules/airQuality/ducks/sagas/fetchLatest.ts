@@ -1,4 +1,4 @@
-import { takeEvery, put, all, call } from "redux-saga/effects";
+import { takeEvery, put, all, call } from 'redux-saga/effects';
 import {
   IFetchLatestData,
   fetchLatestDataPage,
@@ -6,13 +6,13 @@ import {
   fetchLatestDataSuccess,
   fetchLatestDataPageSuccess,
   fetchLatestDataPageFailure
-} from "../actions";
-import { FETCH_LATEST_DATA } from "../types";
+} from '../actions';
+import { FETCH_LATEST_DATA } from '../types';
 import {
   fetchLatest,
   IFetchLatestParams,
   IFetchLatestResponseBody
-} from "../../api/fetchLatest";
+} from '../../api/fetchLatest';
 
 export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
   try {
@@ -22,7 +22,7 @@ export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
     );
 
     if (results === null) {
-      throw new Error("Failed to fetch first page");
+      throw new Error('Failed to fetch first page');
     }
 
     const {
@@ -39,13 +39,13 @@ export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
 
     const completeFailure = completedPageFetchRequests.reduce(
       (failed: boolean, response: IFetchLatestResponseBody) => {
-        return failed && response;
+        return failed && response === null;
       },
       true
     );
 
     if (completeFailure) {
-      console.log("Failed to fetch latest remaining data pages", {
+      console.log('Failed to fetch latest remaining data pages', {
         payload,
         limit,
         found
@@ -54,7 +54,7 @@ export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
 
     yield put(fetchLatestDataSuccess());
   } catch (e) {
-    console.log("Failed to fetch latest data:", { payload, e });
+    console.log('Failed to fetch latest data:', { payload, e });
     yield put(fetchLatestDataFailure());
   }
 }
@@ -72,7 +72,7 @@ export function* fetchLatestPage(params: IFetchLatestParams) {
 
     return { meta, results: latestResults };
   } catch (e) {
-    console.log("FetchLatestDataPage Failure:", params);
+    console.log('FetchLatestDataPage Failure:', params);
     yield put(fetchLatestDataPageFailure());
 
     return null;

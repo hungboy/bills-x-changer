@@ -17,7 +17,8 @@ import {
   Value,
   LastUpdated,
   Unit,
-  SourceName
+  SourceName,
+  CoordinatesObject
 } from '../interfaces/types';
 
 const URL = '/v1/latest';
@@ -68,6 +69,7 @@ export interface IFetchLatestResult {
   country: Country;
   distance: Distance;
   measurements: IFetchLatestMeasurement[];
+  coordinates: CoordinatesObject;
 }
 
 export interface IFetchLatestResponseBody {
@@ -80,7 +82,7 @@ export const fetchLatest = async (
 ): Promise<IFetchLatestResponseBody> => {
   const requestConfigs = {
     baseURL: openaqURL,
-    params: { ...params, has_geo: true, limit: 2000 }
+    params: { ...params, has_geo: true, limit: 1000 }
   };
 
   const { data }: { data: IFetchLatestResponseBody } = await axios.get(
