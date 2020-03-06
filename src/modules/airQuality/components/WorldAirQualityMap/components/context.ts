@@ -1,17 +1,17 @@
-import { createContext } from 'react';
+import { createContext, useRef } from 'react';
 
 export interface IMapContext {
   mapRef: React.RefObject<any> | null;
-  setMapRef: (ref: any) => void | null;
+  setMapRef: (ref: any) => void;
   layerRef: React.RefObject<any> | null;
-  setLayerRef: (ref: any) => void | null;
+  setLayerRef: (ref: any) => void;
 }
 
-export const DEFAULT_MAP_CONTEXT = {
+export const DEFAULT_MAP_CONTEXT: IMapContext = {
   mapRef: null,
-  setMapRef: null,
+  setMapRef: (ref: any) => {},
   layerRef: null,
-  setLayerRef: null
+  setLayerRef: (ref: any) => {}
 };
 
 export const context = createContext(DEFAULT_MAP_CONTEXT);

@@ -1,25 +1,24 @@
-import React, { useEffect, useState, useRef, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect, useRef, useContext } from 'react';
 import L from 'leaflet';
 import { IFetchLatestResult } from '../../../../api/fetchLatest';
-import { calculateCoordinatesString } from '../../../../interfaces/constants';
+import { context as MapContext } from '../context';
 import './styles.scss';
 
 export interface IMapProps {
   markers: Marker[] | null;
-  render: (props: { mapRef: React.RefObject<any> }) => React.ReactNode | null;
+  children: React.ReactNode;
 }
 
 export type Marker = IFetchLatestResult;
 
-export function Map({ markers, render }: IMapProps) {
-  // create map
-  const mapRef = useRef<any>(null);
+export function Map({ markers, children }: IMapProps) {
+  const { mapRef, setMapRef, layerRef, setLayerRef } = useContext(MapContext);
+
   useEffect(() => {
     // Add base map
     // Bounding the drag to the edges of the world
     // Reducing zoom levels to usable levels
-    mapRef.current = L.map('map-component', {
+    const map = L.map('map-component', {
       maxBounds: [
         [90, -180],
         [-90, 180]
@@ -36,36 +35,20 @@ export function Map({ markers, render }: IMapProps) {
         })
       ]
     });
+
+    setMapRef(map);
   }, []);
 
-  // add marker
-  const markerRef = useRef<any>(null);
-
   useEffect(() => {
-    if (markerRef.current) {
-    } else {
-      markerRef.current = L.marker([0, 0]).addTo(mapRef.current);
-    }
-  }, []);
-
-  // add base layer
-  const layerRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (layerRef.current) {
+    if (layerRef?.current) {
       layerRef.current.clearLayers();
     } else {
-      layerRef.current = L.layerGroup().addTo(mapRef.current);
+      const layer = L.layerGroup().addTo(mapRef?.current);
+      setLayerRef(layer);
     }
   }, [markers]);
 
-  return (
-    <div id="map-component">
-      {typeof render !== 'undefined' &&
-        render !== null &&
-        render({ mapRef: layerRef })}
-    </div>
-  );
+  return <div id="map-component">{children}</div>;
 }
 
 export default Map;
