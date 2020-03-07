@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import L from 'leaflet';
 import { IFetchLatestResult } from '../../../../api/fetchLatest';
 import { context as MapContext } from '../context';
@@ -37,7 +37,7 @@ export function Map({ markers, children }: IMapProps) {
     });
 
     setMapRef(map);
-  }, []);
+  }, [setMapRef]);
 
   useEffect(() => {
     if (layerRef?.current) {
@@ -46,7 +46,7 @@ export function Map({ markers, children }: IMapProps) {
       const layer = L.layerGroup().addTo(mapRef?.current);
       setLayerRef(layer);
     }
-  }, [markers]);
+  }, [markers, layerRef, setLayerRef, mapRef]);
 
   return <div id="map-component">{children}</div>;
 }

@@ -1,13 +1,12 @@
-import { connect } from "react-redux";
-import { IStoreState } from "../../../../ducks/types";
+import { connect } from 'react-redux';
+import { IStoreState } from '../../../../ducks/types';
 import {
-  getFetchLatestDataFailure,
   getFetchLatestDataPageFailure,
   getIsFetchingLatestData,
   getLatestData
-} from "../../ducks/selectors";
-import { fetchLatestData } from "../../ducks/actions";
-import { WorldAirQualityMap } from "./component";
+} from '../../ducks/selectors';
+import { fetchLatestData } from '../../ducks/actions';
+import { WorldAirQualityMap } from './component';
 
 export const mapStateToProps = (state: IStoreState) => ({
   isFetchingLatestData: getIsFetchingLatestData(state),

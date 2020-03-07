@@ -1,4 +1,4 @@
-import { createContext, useRef } from 'react';
+import { createContext } from 'react';
 
 export interface IMapContext {
   mapRef: React.RefObject<any> | null;
