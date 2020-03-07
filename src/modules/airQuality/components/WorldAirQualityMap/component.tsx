@@ -3,8 +3,10 @@ import { IFetchLatestResult } from '../../api/fetchLatest';
 import { LoadingSpinner } from '../../../common';
 import { Map } from './components/Map';
 import { Marker } from './components/Marker';
+import { Map as LeafletMap, LeafletEvent } from 'leaflet';
 import { context as MapContext } from './components/context';
 import './styles.scss';
+import { calculateCoordinatesString } from '../../interfaces/constants';
 export interface IWorldAirQualityMapProps
   extends IWorldAirQualityMapDispatches {
   isFetchingLatestData: boolean;
@@ -25,20 +27,40 @@ export const WorldAirQualityMap = ({
   latestData
 }: IWorldAirQualityMapProps) => {
   const mapRef = useRef<any>(null);
+  const currentMapRef: LeafletMap | null = mapRef.current;
   const setMapRef = (ref: any) => (mapRef.current = ref);
   const layerRef = useRef<any>(null);
   const setLayerRef = (ref: any) => (layerRef.current = ref);
 
+  const [isMapPositionDirty, setMapPositionDirty] = useState<boolean>(true);
+
   useEffect(() => {
     const onMount = () => {
       fetchLatestData();
+      setMapPositionDirty(false);
     };
     onMount();
-  }, [fetchLatestData]);
+  }, [fetchLatestData, setMapPositionDirty]);
+
+  useEffect(() => {
+    if (currentMapRef !== null) {
+      currentMapRef.on('zoomend', (event: LeafletEvent) => {
+        setMapPositionDirty(true);
+      });
+      currentMapRef.on('moveend', (event: LeafletEvent) => {
+        setMapPositionDirty(true);
+      });
+    }
+  }, [currentMapRef]);
 
   return (
     <div className="world-air-quality-map">
       <MapContext.Provider value={{ mapRef, setMapRef, layerRef, setLayerRef }}>
+        {isMapPositionDirty && (
+          <div className="world-air-quality-map__fetch-latest-button">
+            FETCH STUFF!
+          </div>
+        )}
         {isFetchingLatestData && (
           <LoadingSpinner
             classes={['world-air-quality-map__loading-spinner']}
@@ -56,7 +78,14 @@ export const WorldAirQualityMap = ({
 
 const renderMarkers = (latestData: IFetchLatestResult[] | null) => {
   if (latestData) {
-    return latestData.map(data => <Marker data={data} />);
+    return latestData.map(data => (
+      <Marker
+        key={`${data.location}-${data.city}-${
+          data.country
+        }-${calculateCoordinatesString(data.coordinates)}`}
+        data={data}
+      />
+    ));
   }
   return null;
 };

@@ -31,7 +31,7 @@ export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
 
     const pageCount = Math.ceil(found / limit);
     const pageFetchRequests = [];
-    for (let i = 1; i <= pageCount; i++) {
+    for (let i = 2; i <= pageCount; i++) {
       pageFetchRequests.push(call(fetchLatestPage, { ...payload, page: i }));
     }
 

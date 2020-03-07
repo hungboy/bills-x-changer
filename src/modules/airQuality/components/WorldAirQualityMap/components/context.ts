@@ -15,3 +15,5 @@ export const DEFAULT_MAP_CONTEXT: IMapContext = {
 };
 
 export const context = createContext(DEFAULT_MAP_CONTEXT);
+
+context.displayName = 'MAP CONTEXT';
