@@ -5,13 +5,15 @@ export interface IMapContext {
   setMapRef: (ref: any) => void;
   layerRef: React.RefObject<any> | null;
   setLayerRef: (ref: any) => void;
+  shouldClearLayer: () => boolean;
 }
 
 export const DEFAULT_MAP_CONTEXT: IMapContext = {
   mapRef: null,
   setMapRef: (ref: any) => {},
   layerRef: null,
-  setLayerRef: (ref: any) => {}
+  setLayerRef: (ref: any) => {},
+  shouldClearLayer: () => false
 };
 
 export const context = createContext(DEFAULT_MAP_CONTEXT);

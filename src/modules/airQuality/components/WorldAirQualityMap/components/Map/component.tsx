@@ -5,19 +5,25 @@ import { context as MapContext } from '../context';
 import './styles.scss';
 
 export interface IMapProps {
-  markers: Marker[] | null;
   children: React.ReactNode;
 }
 
 export type Marker = IFetchLatestResult;
 
-export function Map({ markers, children }: IMapProps) {
-  const { mapRef, setMapRef, layerRef, setLayerRef } = useContext(MapContext);
+export function Map({ children }: IMapProps) {
+  const {
+    mapRef,
+    setMapRef,
+    layerRef,
+    setLayerRef,
+    shouldClearLayer
+  } = useContext(MapContext);
 
   useEffect(() => {
     // Add base map
     // Bounding the drag to the edges of the world
     // Reducing zoom levels to usable levels
+
     const map = L.map('map-component', {
       maxBounds: [
         [90, -180],
@@ -35,18 +41,22 @@ export function Map({ markers, children }: IMapProps) {
         })
       ]
     });
-
     setMapRef(map);
-  }, [setMapRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const clearLayer = shouldClearLayer();
 
   useEffect(() => {
-    if (layerRef?.current) {
+    debugger;
+    if (layerRef?.current && clearLayer) {
       layerRef.current.clearLayers();
-    } else {
+    } else if (mapRef?.current ?? false) {
       const layer = L.layerGroup().addTo(mapRef?.current);
       setLayerRef(layer);
     }
-  }, [markers, layerRef, setLayerRef, mapRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clearLayer]);
 
   return <div id="map-component">{children}</div>;
 }

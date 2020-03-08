@@ -31,8 +31,20 @@ export const WorldAirQualityMap = ({
   const setMapRef = (ref: any) => (mapRef.current = ref);
   const layerRef = useRef<any>(null);
   const setLayerRef = (ref: any) => (layerRef.current = ref);
-
+  const [shouldRefreshMap, setShouldRefreshMap] = useState<boolean>(false);
   const [isMapPositionDirty, setMapPositionDirty] = useState<boolean>(true);
+
+  const shouldClearLayer = () => {
+    const refreshMap = shouldRefreshMap;
+
+    if (refreshMap) {
+      setShouldRefreshMap(false);
+    }
+
+    return refreshMap;
+  };
+
+  const toggleRefreshMap = () => setShouldRefreshMap(true);
 
   useEffect(() => {
     const onMount = () => {
@@ -55,7 +67,9 @@ export const WorldAirQualityMap = ({
 
   return (
     <div className="world-air-quality-map">
-      <MapContext.Provider value={{ mapRef, setMapRef, layerRef, setLayerRef }}>
+      <MapContext.Provider
+        value={{ mapRef, setMapRef, layerRef, setLayerRef, shouldClearLayer }}
+      >
         {isMapPositionDirty && (
           <div className="world-air-quality-map__fetch-latest-button">
             FETCH STUFF!
@@ -68,7 +82,7 @@ export const WorldAirQualityMap = ({
         )}
 
         <div className="world-air-quality-map__map">
-          <Map markers={null}>{renderMarkers(latestData)}</Map>
+          <Map>{renderMarkers(latestData)}</Map>
         </div>
         <div className="world-air-quality-map__latest-data"></div>
       </MapContext.Provider>
