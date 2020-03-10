@@ -8,13 +8,7 @@ export interface IMapProps {
 }
 
 export function Map({ children }: IMapProps) {
-  const {
-    mapRef,
-    setMapRef,
-    layerRef,
-    setLayerRef,
-    shouldClearLayer
-  } = useContext(MapContext);
+  const { setMapRef } = useContext(MapContext);
 
   useEffect(() => {
     // Add base map
@@ -41,20 +35,6 @@ export function Map({ children }: IMapProps) {
     setMapRef(map);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (layerRef?.current && shouldClearLayer()) {
-    layerRef.current.clearLayers();
-  }
-
-  useEffect(() => {
-    if (layerRef?.current ?? false) {
-      return;
-    }
-    if (mapRef?.current ?? false) {
-      const layer = L.layerGroup().addTo(mapRef?.current);
-      setLayerRef(layer);
-    }
-  }, [mapRef, layerRef, setLayerRef]);
 
   return <div id="map-component">{children}</div>;
 }

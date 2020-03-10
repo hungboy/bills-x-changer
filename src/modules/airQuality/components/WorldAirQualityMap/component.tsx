@@ -2,12 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ILatestMeasurementResult } from '../../interfaces/types';
 import { LoadingSpinner, SelectDropdown } from '../../../common';
 import { Map } from './components/Map';
-import { Marker } from './components/Marker';
-import { Map as LeafletMap, LeafletEvent } from 'leaflet';
+import {
+  MarkerLayer,
+  IMarker,
+  RenderMarker
+} from './components/MarkerLayer/component';
+import { Map as LeafletMap, LeafletEvent, LatLngExpression } from 'leaflet';
 import { context as MapContext } from './components/context';
 import './styles.scss';
 import {
-  calculateCoordinatesString,
   ParameterName,
   ParameterStrings,
   Parameter
@@ -40,10 +43,8 @@ export const WorldAirQualityMap = ({
   setWorldAirQualityMapParameterFilter
 }: IWorldAirQualityMapProps) => {
   const mapRef = useRef<any>(null);
-  const currentMapRef: LeafletMap | null = mapRef.current;
   const setMapRef = (ref: any) => (mapRef.current = ref);
-  const layerRef = useRef<any>(null);
-  const setLayerRef = (ref: any) => (layerRef.current = ref);
+
   const [shouldRefreshMap, setShouldRefreshMap] = useState<boolean>(false);
   const [isMapPositionDirty, setMapPositionDirty] = useState<boolean>(true);
 
@@ -74,21 +75,9 @@ export const WorldAirQualityMap = ({
     onMount();
   }, [fetchLatestData, setMapPositionDirty]);
 
-  useEffect(() => {
-    if (currentMapRef !== null) {
-      currentMapRef.on('zoomend', (event: LeafletEvent) => {
-        setMapPositionDirty(true);
-      });
-      currentMapRef.on('moveend', (event: LeafletEvent) => {
-        setMapPositionDirty(true);
-      });
-    }
-  }, [currentMapRef]);
   return (
     <div className="world-air-quality-map">
-      <MapContext.Provider
-        value={{ mapRef, setMapRef, layerRef, setLayerRef, shouldClearLayer }}
-      >
+      <MapContext.Provider value={{ mapRef, setMapRef }}>
         {renderSelectDropdown(generateDropdownOptions(), handleParameterSelect)}
         {isMapPositionDirty && (
           <div className="world-air-quality-map__fetch-latest-button">
@@ -102,7 +91,10 @@ export const WorldAirQualityMap = ({
         )}
 
         <div className="world-air-quality-map__map">
-          <Map>{renderMarkers(latestData)}</Map>
+          <Map>
+            {latestData &&
+              renderLatestDataMarkerLayer(latestData, shouldClearLayer)}
+          </Map>
         </div>
       </MapContext.Provider>
     </div>
@@ -121,16 +113,37 @@ const renderSelectDropdown = <T extends {}>(
   handleParameterSelect?: (option: IDropdownOption<T>) => void
 ) => <SelectDropdown options={options} onSelect={handleParameterSelect} />;
 
-const renderMarkers = (latestData: ILatestMeasurementResult[] | null) => {
+const renderLatestDataMarker: RenderMarker<ILatestMeasurementResult> = (
+  marker: IMarker<ILatestMeasurementResult>
+) => {
+  const {
+    data: {
+      coordinates: { latitude, longitude }
+    }
+  } = marker;
+
+  return {
+    latlng: [latitude, longitude] as LatLngExpression
+  };
+};
+
+const renderLatestDataMarkerLayer = (
+  latestData: ILatestMeasurementResult[] | null,
+  shouldClearLayer?: () => boolean
+) => {
   if (latestData) {
-    return latestData.map(data => (
-      <Marker
-        key={`${data.location}-${data.city}-${
-          data.country
-        }-${calculateCoordinatesString(data.coordinates)}`}
-        data={data}
+    const markers = latestData.map(data => ({ data }));
+
+    return (
+      <MarkerLayer
+        renderMarker={
+          renderLatestDataMarker as RenderMarker<ILatestMeasurementResult>
+        }
+        markers={markers}
+        shouldClearLayer={shouldClearLayer}
       />
-    ));
+    );
   }
+
   return null;
 };

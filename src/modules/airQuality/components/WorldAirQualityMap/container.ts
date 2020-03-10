@@ -13,8 +13,6 @@ import {
 import { WorldAirQualityMap } from './component';
 
 export const mapStateToProps = (state: IStoreState) => {
-  const selectedP = getSelectedParameterFilter(state);
-  const dd = getLatestDataByParameter(state, selectedP);
   return {
     isFetchingLatestData: getIsFetchingLatestData(state),
     fetchLatestDataFailure: getFetchLatestDataPageFailure(state),
