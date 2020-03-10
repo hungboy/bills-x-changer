@@ -1,3 +1,5 @@
+import { IFetchLatestMeasurement } from '../api/fetchLatest';
+
 export type City = string;
 export type Country = string;
 export type Location = string;
@@ -19,3 +21,16 @@ export type Value = number;
 export type LastUpdated = string;
 export type Unit = string;
 export type SourceName = string;
+
+export interface ILatestMeasurementResult {
+  location: Location;
+  city: City;
+  country: Country;
+  distance: Distance;
+  measurement: IFetchLatestMeasurement;
+  coordinates: CoordinatesObject;
+}
+
+export interface ICategorizedLatestResultsMap {
+  [parameter: string]: ILatestMeasurementResult[];
+}

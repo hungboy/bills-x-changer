@@ -13,6 +13,7 @@ import {
   IFetchLatestParams,
   IFetchLatestResponseBody
 } from '../../api/fetchLatest';
+import { extractDataByParameter } from '../../utils/dataProcessing/extractLatestDataByParameter';
 
 export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
   try {
@@ -68,7 +69,11 @@ export function* fetchLatestPage(params: IFetchLatestParams) {
       results: latestResults
     }: IFetchLatestResponseBody = yield call(fetchLatest, params);
 
-    yield put(fetchLatestDataPageSuccess({ latestResults }));
+    const categorizedLatestResults = extractDataByParameter(latestResults);
+
+    yield put(
+      fetchLatestDataPageSuccess({ latestResults, categorizedLatestResults })
+    );
 
     return { meta, results: latestResults };
   } catch (e) {

@@ -1,6 +1,10 @@
-import * as actionTypes from "./types";
-import { IFetchLatestResult, IFetchLatestParams } from "../api/fetchLatest";
-import { Coordinates, Radius } from "../interfaces/types";
+import * as actionTypes from './types';
+import { IFetchLatestResult, IFetchLatestParams } from '../api/fetchLatest';
+import {
+  Coordinates,
+  Radius,
+  ICategorizedLatestResultsMap
+} from '../interfaces/types';
 export interface ISetIsFetchingData {
   type: actionTypes.SET_IS_FETCHING_DATA;
   payload: { isFetchingData: boolean };
@@ -70,6 +74,7 @@ export const fetchLatestDataPage = (
 
 export interface IFetchLatestDataPageSuccessArgs {
   latestResults: IFetchLatestResult[];
+  categorizedLatestResults: ICategorizedLatestResultsMap;
 }
 
 export interface IFetchLatestDataPageSuccess {

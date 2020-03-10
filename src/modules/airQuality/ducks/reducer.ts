@@ -1,6 +1,7 @@
-import { IFetchLatestResult } from "../api/fetchLatest";
-import { AirQualityActions } from "./actions";
-import * as actionTypes from "./types";
+import { IFetchLatestResult } from '../api/fetchLatest';
+import { AirQualityActions, IFetchLatestDataPageSuccess } from './actions';
+import * as actionTypes from './types';
+import { ICategorizedLatestResultsMap } from '../interfaces/types';
 
 export interface IAirQualityState extends IAirQualityLatestResultsState {
   isFetchingData: boolean;
@@ -9,12 +10,14 @@ export interface IAirQualityState extends IAirQualityLatestResultsState {
 export interface IAirQualityLatestResultsState {
   isFetchingLatestData: boolean;
   latestResults: IFetchLatestResult[] | null;
+  categorizedLatestResults: ICategorizedLatestResultsMap | null;
   fetchLatestDataFailure: boolean;
   fetchLatestDataPageFailure: boolean;
 }
 
 export const initialAirQualityLatestResultsState = {
   latestResults: null,
+  categorizedLatestResults: null,
   isFetchingLatestData: false,
   fetchLatestDataFailure: false,
   fetchLatestDataPageFailure: false
@@ -48,13 +51,15 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
       };
 
     case actionTypes.FETCH_LATEST_DATA_PAGE_SUCCESS:
-      return {
-        ...state,
-        latestResults: [
-          ...(state.latestResults ?? []),
-          ...action.payload.latestResults
-        ]
-      };
+      return handleFetchLatestDataPageSucceess(action, state);
+
+    // return {
+    //     ...state,
+    //     latestResults: [
+    //       ...(state.latestResults ?? []),
+    //       ...action.payload.latestResults
+    //     ]
+    //   };
 
     case actionTypes.FETCH_LATEST_DATA_PAGE_FAILURE:
       return {
@@ -70,4 +75,36 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
       //Reset state when accessing another portion of the app
       return { ...initialState };
   }
+};
+
+const handleFetchLatestDataPageSucceess = (
+  action: IFetchLatestDataPageSuccess,
+  state: IAirQualityState
+): IAirQualityState => {
+  let nextState = {
+    ...state,
+    latestResults: [
+      ...(state.latestResults ?? []),
+      ...action.payload.latestResults
+    ]
+  };
+
+  Object.entries(action.payload.categorizedLatestResults).forEach(
+    ([parameter, categorizedResults]) => {
+      if (nextState.categorizedLatestResults === null) {
+        nextState.categorizedLatestResults = {};
+      }
+      if (
+        typeof nextState.categorizedLatestResults[parameter] === 'undefined'
+      ) {
+        nextState.categorizedLatestResults[parameter] = [];
+      }
+      nextState.categorizedLatestResults[parameter] = [
+        ...nextState.categorizedLatestResults[parameter],
+        ...categorizedResults
+      ];
+    }
+  );
+
+  return nextState;
 };
