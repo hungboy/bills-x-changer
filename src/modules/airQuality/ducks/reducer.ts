@@ -2,10 +2,21 @@ import { IFetchLatestResult } from '../api/fetchLatest';
 import { AirQualityActions, IFetchLatestDataPageSuccess } from './actions';
 import * as actionTypes from './types';
 import { ICategorizedLatestResultsMap } from '../interfaces/types';
+import { Parameter } from '../interfaces/constants';
 
-export interface IAirQualityState extends IAirQualityLatestResultsState {
+export interface IAirQualityState
+  extends IAirQualityLatestResultsState,
+    IWorldAirQualityMapState {
   isFetchingData: boolean;
 }
+
+export interface IWorldAirQualityMapState {
+  parameterFilter: Parameter | null;
+}
+
+export const initialWorldAirQualityMapState: IWorldAirQualityMapState = {
+  parameterFilter: null
+};
 
 export interface IAirQualityLatestResultsState {
   isFetchingLatestData: boolean;
@@ -15,7 +26,7 @@ export interface IAirQualityLatestResultsState {
   fetchLatestDataPageFailure: boolean;
 }
 
-export const initialAirQualityLatestResultsState = {
+export const initialAirQualityLatestResultsState: IAirQualityLatestResultsState = {
   latestResults: null,
   categorizedLatestResults: null,
   isFetchingLatestData: false,
@@ -25,7 +36,8 @@ export const initialAirQualityLatestResultsState = {
 
 export const initialState: IAirQualityState = {
   isFetchingData: false,
-  ...initialAirQualityLatestResultsState
+  ...initialAirQualityLatestResultsState,
+  ...initialWorldAirQualityMapState
 };
 
 export const reducer = (state = initialState, action: AirQualityActions) => {
@@ -52,14 +64,6 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
 
     case actionTypes.FETCH_LATEST_DATA_PAGE_SUCCESS:
       return handleFetchLatestDataPageSucceess(action, state);
-
-    // return {
-    //     ...state,
-    //     latestResults: [
-    //       ...(state.latestResults ?? []),
-    //       ...action.payload.latestResults
-    //     ]
-    //   };
 
     case actionTypes.FETCH_LATEST_DATA_PAGE_FAILURE:
       return {

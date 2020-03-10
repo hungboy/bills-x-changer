@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { IFetchLatestResult } from '../../api/fetchLatest';
+import { ILatestMeasurementResult } from '../../interfaces/types';
 import { LoadingSpinner, SelectDropdown } from '../../../common';
 import { Map } from './components/Map';
 import { Marker } from './components/Marker';
@@ -11,12 +11,13 @@ import {
   ParameterName
 } from '../../interfaces/constants';
 import { IDropdownOption } from '../../../common/SelectDropdown/types';
+
 export interface IWorldAirQualityMapProps
   extends IWorldAirQualityMapDispatches {
   isFetchingLatestData: boolean;
   fetchLatestDataFailure: boolean;
   fetchLatestDataPageFailure: boolean;
-  latestData: IFetchLatestResult[] | null;
+  latestData: ILatestMeasurementResult[] | null;
 }
 
 export interface IWorldAirQualityMapDispatches {
@@ -105,7 +106,7 @@ const renderSelectDropdown = <T extends {}>(options: IDropdownOption<T>[]) => (
   <SelectDropdown options={options} />
 );
 
-const renderMarkers = (latestData: IFetchLatestResult[] | null) => {
+const renderMarkers = (latestData: ILatestMeasurementResult[] | null) => {
   if (latestData) {
     return latestData.map(data => (
       <Marker

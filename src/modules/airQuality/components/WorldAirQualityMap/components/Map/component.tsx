@@ -1,14 +1,11 @@
 import React, { useEffect, useContext } from 'react';
 import L from 'leaflet';
-import { IFetchLatestResult } from '../../../../api/fetchLatest';
 import { context as MapContext } from '../context';
 import './styles.scss';
 
 export interface IMapProps {
   children: React.ReactNode;
 }
-
-export type Marker = IFetchLatestResult;
 
 export function Map({ children }: IMapProps) {
   const {

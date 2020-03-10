@@ -1,9 +1,8 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import L from 'leaflet';
-import { IFetchLatestResult } from '../../../../api/fetchLatest';
 import { context as MapContext } from '../context';
 
-export type MarkerData = IFetchLatestResult;
+export type MarkerData = any;
 
 export interface IMarkerProps {
   data: MarkerData;
