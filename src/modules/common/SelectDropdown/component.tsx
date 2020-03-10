@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, EventHandler } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IDropdownOption, ISelectedOptionMap } from './types';
 import { context as DropdownContext } from './context';
 import {

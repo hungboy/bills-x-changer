@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, EventHandler } from 'react';
+import { useEffect, useRef, EventHandler } from 'react';
 
 export const useEventListener = (
   eventName: string,
