@@ -1,0 +1,7 @@
+@import '../../../../../styles/colors.module.scss';
+
+li.select-dropdown__drop-down-option {
+  &:hover {
+    background-color: $green-1;
+  }
+}

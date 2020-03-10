@@ -48,7 +48,6 @@ export function Map({ children }: IMapProps) {
   const clearLayer = shouldClearLayer();
 
   useEffect(() => {
-    debugger;
     if (layerRef?.current && clearLayer) {
       layerRef.current.clearLayers();
     } else if (mapRef?.current ?? false) {

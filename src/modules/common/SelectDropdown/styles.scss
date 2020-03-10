@@ -1,0 +1,50 @@
+@import '../../../styles/colors.module.scss';
+
+@mixin select-dropdown-menuBorders {
+  border-width: 1px;
+  border-style: solid;
+  border-color: $red-1;
+}
+
+.select-dropdown {
+  // width: 100%;
+  // display: flex;
+  // z-index: 101;
+  cursor: pointer;
+
+  .select-dropdown_header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    padding: 5px 5px 5px 5px;
+    @include select-dropdown-menuBorders;
+
+    .select-dropdown_header_title {
+    }
+  }
+}
+
+ul.select-dropdown_menu {
+  position: absolute;
+  background-color: $white;
+  list-style-type: none;
+  padding-inline-start: 0px;
+  @include select-dropdown-menuBorders;
+
+  //to be overriden inline
+  top: 0;
+  left: 0;
+  z-index: 500;
+}
+
+#select-dropdown-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  height: 100vh;
+  width: 100vw;
+  background-color: blue;
+  opacity: 0.3;
+}

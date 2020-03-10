@@ -1,5 +1,8 @@
 .world-air-quality-map {
   height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
 }
 .world-air-quality-map__map {
   height: 700px;

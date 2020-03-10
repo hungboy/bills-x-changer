@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { IFetchLatestResult } from '../../api/fetchLatest';
-import { LoadingSpinner } from '../../../common';
+import { LoadingSpinner, SelectDropdown } from '../../../common';
 import { Map } from './components/Map';
 import { Marker } from './components/Marker';
 import { Map as LeafletMap, LeafletEvent } from 'leaflet';
 import { context as MapContext } from './components/context';
 import './styles.scss';
-import { calculateCoordinatesString } from '../../interfaces/constants';
+import {
+  calculateCoordinatesString,
+  ParameterName
+} from '../../interfaces/constants';
+import { IDropdownOption } from '../../../common/SelectDropdown/types';
 export interface IWorldAirQualityMapProps
   extends IWorldAirQualityMapDispatches {
   isFetchingLatestData: boolean;
@@ -70,6 +74,7 @@ export const WorldAirQualityMap = ({
       <MapContext.Provider
         value={{ mapRef, setMapRef, layerRef, setLayerRef, shouldClearLayer }}
       >
+        {renderSelectDropdown(generateDropdownOptions())}
         {isMapPositionDirty && (
           <div className="world-air-quality-map__fetch-latest-button">
             FETCH STUFF!
@@ -84,11 +89,21 @@ export const WorldAirQualityMap = ({
         <div className="world-air-quality-map__map">
           <Map>{renderMarkers(latestData)}</Map>
         </div>
-        <div className="world-air-quality-map__latest-data"></div>
       </MapContext.Provider>
     </div>
   );
 };
+
+const generateDropdownOptions = (): IDropdownOption<string[]>[] =>
+  Object.entries(ParameterName).map(([parameter, label]: [string, string]) => ({
+    key: parameter,
+    label,
+    data: [parameter, label]
+  }));
+
+const renderSelectDropdown = <T extends {}>(options: IDropdownOption<T>[]) => (
+  <SelectDropdown options={options} />
+);
 
 const renderMarkers = (latestData: IFetchLatestResult[] | null) => {
   if (latestData) {
