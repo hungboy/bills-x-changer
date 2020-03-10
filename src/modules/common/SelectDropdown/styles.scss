@@ -7,9 +7,6 @@
 }
 
 .select-dropdown {
-  // width: 100%;
-  // display: flex;
-  // z-index: 101;
   cursor: pointer;
 
   .select-dropdown_header {
@@ -35,7 +32,7 @@ ul.select-dropdown_menu {
   //to be overriden inline
   top: 0;
   left: 0;
-  z-index: 500;
+  z-index: 5000;
 }
 
 #select-dropdown-container {

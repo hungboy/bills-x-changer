@@ -59,7 +59,7 @@ export const MarkerLayer = <T extends {}>({
       }
       setHasRendered(true);
     }
-  }, [layerRef, markers, renderMarker, rerender]);
+  }, [layerRef, markers, renderMarker, rerender, hasRendered]);
 
   return null;
 };

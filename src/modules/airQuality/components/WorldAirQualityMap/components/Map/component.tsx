@@ -8,13 +8,15 @@ export interface IMapProps {
 }
 
 export function Map({ children }: IMapProps) {
-  const { setMapRef } = useContext(MapContext);
+  const { mapRef, setMapRef } = useContext(MapContext);
 
   useEffect(() => {
     // Add base map
     // Bounding the drag to the edges of the world
     // Reducing zoom levels to usable levels
-
+    if (mapRef?.current) {
+      return;
+    }
     const map = L.map('map-component', {
       maxBounds: [
         [90, -180],
@@ -33,8 +35,7 @@ export function Map({ children }: IMapProps) {
       ]
     });
     setMapRef(map);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setMapRef, mapRef]);
 
   return <div id="map-component">{children}</div>;
 }

@@ -7,7 +7,7 @@ import {
   IMarker,
   RenderMarker
 } from './components/MarkerLayer/component';
-import { Map as LeafletMap, LeafletEvent, LatLngExpression } from 'leaflet';
+import { LatLngExpression } from 'leaflet';
 import { context as MapContext } from './components/context';
 import './styles.scss';
 import {
