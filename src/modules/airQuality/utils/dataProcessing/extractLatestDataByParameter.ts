@@ -7,7 +7,6 @@ import {
 export const extractDataByParameter = (
   results: IFetchLatestResult[]
 ): ICategorizedLatestResultsMap => {
-  debugger;
   const measurementDataMap: ICategorizedLatestResultsMap = results.reduce(
     (dataMap, { measurements, ...rest }) => {
       measurements.forEach(measurement => {

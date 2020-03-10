@@ -3,21 +3,33 @@ import { IStoreState } from '../../../../ducks/types';
 import {
   getFetchLatestDataPageFailure,
   getIsFetchingLatestData,
-  getLatestData,
   getLatestDataByParameter,
   getSelectedParameterFilter
 } from '../../ducks/selectors';
-import { fetchLatestData } from '../../ducks/actions';
+import {
+  fetchLatestData,
+  setWorldAirQualityMapParameterFilter
+} from '../../ducks/actions';
 import { WorldAirQualityMap } from './component';
 
-export const mapStateToProps = (state: IStoreState) => ({
-  isFetchingLatestData: getIsFetchingLatestData(state),
-  fetchLatestDataFailure: getFetchLatestDataPageFailure(state),
-  fetchLatestDataPageFailure: getIsFetchingLatestData(state),
-  latestData: getLatestDataByParameter(state, getSelectedParameterFilter(state))
-});
+export const mapStateToProps = (state: IStoreState) => {
+  const selectedP = getSelectedParameterFilter(state);
+  const dd = getLatestDataByParameter(state, selectedP);
+  return {
+    isFetchingLatestData: getIsFetchingLatestData(state),
+    fetchLatestDataFailure: getFetchLatestDataPageFailure(state),
+    fetchLatestDataPageFailure: getIsFetchingLatestData(state),
+    latestData: getLatestDataByParameter(
+      state,
+      getSelectedParameterFilter(state)
+    )
+  };
+};
 
-export const dispatchMap = { fetchLatestData };
+export const dispatchMap = {
+  fetchLatestData,
+  setWorldAirQualityMapParameterFilter
+};
 
 export const ConnectedWorldAirQualityMap = connect(
   mapStateToProps,

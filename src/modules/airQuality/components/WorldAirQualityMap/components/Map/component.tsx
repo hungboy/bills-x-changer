@@ -42,17 +42,19 @@ export function Map({ children }: IMapProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const clearLayer = shouldClearLayer();
+  if (layerRef?.current && shouldClearLayer()) {
+    layerRef.current.clearLayers();
+  }
 
   useEffect(() => {
-    if (layerRef?.current && clearLayer) {
-      layerRef.current.clearLayers();
-    } else if (mapRef?.current ?? false) {
+    if (layerRef?.current ?? false) {
+      return;
+    }
+    if (mapRef?.current ?? false) {
       const layer = L.layerGroup().addTo(mapRef?.current);
       setLayerRef(layer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clearLayer]);
+  }, [mapRef, layerRef, setLayerRef]);
 
   return <div id="map-component">{children}</div>;
 }

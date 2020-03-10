@@ -8,6 +8,15 @@ export enum Parameter {
   BC = 'bc'
 }
 
+export type ParameterStrings =
+  | 'PM25'
+  | 'PM10'
+  | 'SO2'
+  | 'NO2'
+  | 'O3'
+  | 'CO'
+  | 'BC';
+
 export enum ParameterName {
   PM25 = 'Particulate Matter < 2.5 µm',
   PM10 = 'Particulate Matter < 10 µm',

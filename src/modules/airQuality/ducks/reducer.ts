@@ -74,6 +74,11 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
 
     case actionTypes.FETCH_LATEST_DATA_PAGE:
       return { ...state };
+    case actionTypes.SET_WORLD_AIR_QUALITY_MAP_PARAMETER_FILTER:
+      return {
+        ...state,
+        parameterFilter: action.payload.parameter
+      };
 
     default:
       //Reset state when accessing another portion of the app

@@ -5,6 +5,7 @@ import {
   Radius,
   ICategorizedLatestResultsMap
 } from '../interfaces/types';
+import { Parameter } from '../interfaces/constants';
 export interface ISetIsFetchingData {
   type: actionTypes.SET_IS_FETCHING_DATA;
   payload: { isFetchingData: boolean };
@@ -95,6 +96,21 @@ export interface IFetchLatestDataPageFailure {
 export const fetchLatestDataPageFailure = (): IFetchLatestDataPageFailure => ({
   type: actionTypes.FETCH_LATEST_DATA_PAGE_FAILURE
 });
+export interface ISetWorldAirQualityMapParameterFilterArgs {
+  parameter: Parameter;
+}
+
+export interface ISetWorldAirQualityMapParameterFilter {
+  type: actionTypes.SET_WORLD_AIR_QUALITY_MAP_PARAMETER_FILTER;
+  payload: ISetWorldAirQualityMapParameterFilterArgs;
+}
+
+export const setWorldAirQualityMapParameterFilter = (
+  payload: ISetWorldAirQualityMapParameterFilterArgs
+): ISetWorldAirQualityMapParameterFilter => ({
+  type: actionTypes.SET_WORLD_AIR_QUALITY_MAP_PARAMETER_FILTER,
+  payload
+});
 
 export type LatestDataActions =
   | IFetchLatestData
@@ -102,6 +118,7 @@ export type LatestDataActions =
   | IFetchLatestDataFailure
   | IFetchLatestDataPage
   | IFetchLatestDataPageSuccess
-  | IFetchLatestDataPageFailure;
+  | IFetchLatestDataPageFailure
+  | ISetWorldAirQualityMapParameterFilter;
 
 export type AirQualityActions = ISetIsFetchingData | LatestDataActions;

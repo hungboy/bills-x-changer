@@ -8,7 +8,9 @@ import { context as MapContext } from './components/context';
 import './styles.scss';
 import {
   calculateCoordinatesString,
-  ParameterName
+  ParameterName,
+  ParameterStrings,
+  Parameter
 } from '../../interfaces/constants';
 import { IDropdownOption } from '../../../common/SelectDropdown/types';
 
@@ -22,6 +24,11 @@ export interface IWorldAirQualityMapProps
 
 export interface IWorldAirQualityMapDispatches {
   fetchLatestData: () => void;
+  setWorldAirQualityMapParameterFilter: ({
+    parameter
+  }: {
+    parameter: Parameter;
+  }) => void;
 }
 
 export const WorldAirQualityMap = ({
@@ -29,7 +36,8 @@ export const WorldAirQualityMap = ({
   fetchLatestDataFailure,
   fetchLatestDataPageFailure,
   fetchLatestData,
-  latestData
+  latestData,
+  setWorldAirQualityMapParameterFilter
 }: IWorldAirQualityMapProps) => {
   const mapRef = useRef<any>(null);
   const currentMapRef: LeafletMap | null = mapRef.current;
@@ -51,6 +59,13 @@ export const WorldAirQualityMap = ({
 
   const toggleRefreshMap = () => setShouldRefreshMap(true);
 
+  const handleParameterSelect = (option: IDropdownOption<string[]>) => {
+    toggleRefreshMap();
+    setWorldAirQualityMapParameterFilter({
+      parameter: Parameter[option.data[0] as ParameterStrings]
+    });
+  };
+
   useEffect(() => {
     const onMount = () => {
       fetchLatestData();
@@ -69,13 +84,12 @@ export const WorldAirQualityMap = ({
       });
     }
   }, [currentMapRef]);
-
   return (
     <div className="world-air-quality-map">
       <MapContext.Provider
         value={{ mapRef, setMapRef, layerRef, setLayerRef, shouldClearLayer }}
       >
-        {renderSelectDropdown(generateDropdownOptions())}
+        {renderSelectDropdown(generateDropdownOptions(), handleParameterSelect)}
         {isMapPositionDirty && (
           <div className="world-air-quality-map__fetch-latest-button">
             FETCH STUFF!
@@ -102,9 +116,10 @@ const generateDropdownOptions = (): IDropdownOption<string[]>[] =>
     data: [parameter, label]
   }));
 
-const renderSelectDropdown = <T extends {}>(options: IDropdownOption<T>[]) => (
-  <SelectDropdown options={options} />
-);
+const renderSelectDropdown = <T extends {}>(
+  options: IDropdownOption<T>[],
+  handleParameterSelect?: (option: IDropdownOption<T>) => void
+) => <SelectDropdown options={options} onSelect={handleParameterSelect} />;
 
 const renderMarkers = (latestData: ILatestMeasurementResult[] | null) => {
   if (latestData) {
