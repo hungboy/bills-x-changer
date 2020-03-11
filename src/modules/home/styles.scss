@@ -1,6 +1,26 @@
+@import '../../styles/colors.module.scss';
+
 .home-root {
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .air-quality_link {
+    text-decoration: none;
+    &:hover {
+      .loading-grid_spinner div.loading-grid_spinner_dot {
+        background-color: $green-4;
+      }
+      .loading-grid_subtitle {
+        color: $green-4;
+      }
+    }
+    .loading-grid_spinner div.loading-grid_spinner_dot {
+      background-color: $red-4;
+    }
+    .loading-grid_subtitle {
+      color: $red-4;
+    }
+  }
 }

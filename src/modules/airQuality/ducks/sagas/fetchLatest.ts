@@ -1,4 +1,4 @@
-import { takeEvery, put, all, call } from 'redux-saga/effects';
+import { takeEvery, put, all, call, select } from 'redux-saga/effects';
 import {
   IFetchLatestData,
   fetchLatestDataPage,
@@ -7,13 +7,21 @@ import {
   fetchLatestDataPageSuccess,
   fetchLatestDataPageFailure
 } from '../actions';
+import { getLatestCategorizedData } from '../selectors';
 import { FETCH_LATEST_DATA } from '../types';
 import {
   fetchLatest,
   IFetchLatestParams,
   IFetchLatestResponseBody
 } from '../../api/fetchLatest';
-import { extractDataByParameter } from '../../utils/dataProcessing/extractLatestDataByParameter';
+import {
+  extractDataByParameter,
+  extractMeasurementsRange
+} from '../../utils/dataProcessing/airQuality';
+import {
+  CategorizedLatestResultsMap,
+  CategorizedMeasurementRangeMap
+} from '../../interfaces/types';
 
 export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
   try {
@@ -52,8 +60,14 @@ export function* fetchLatestData({ type, payload = {} }: IFetchLatestData) {
         found
       });
     }
+    const latestCategorizedData: CategorizedLatestResultsMap = yield select(
+      getLatestCategorizedData
+    );
+    const categorizedMeasurementRange: CategorizedMeasurementRangeMap = yield extractMeasurementsRange(
+      latestCategorizedData
+    );
 
-    yield put(fetchLatestDataSuccess());
+    yield put(fetchLatestDataSuccess({ categorizedMeasurementRange }));
   } catch (e) {
     console.log('Failed to fetch latest data:', { payload, e });
     yield put(fetchLatestDataFailure());

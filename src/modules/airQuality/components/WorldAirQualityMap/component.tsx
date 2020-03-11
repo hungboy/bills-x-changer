@@ -23,6 +23,7 @@ export interface IWorldAirQualityMapProps
   fetchLatestDataFailure: boolean;
   fetchLatestDataPageFailure: boolean;
   latestData: ILatestMeasurementResult[] | null;
+  latestDataRange: { max: number; min: number } | null;
 }
 
 export interface IWorldAirQualityMapDispatches {
@@ -46,7 +47,7 @@ export const WorldAirQualityMap = ({
   const setMapRef = (ref: any) => (mapRef.current = ref);
 
   const [shouldRefreshMap, setShouldRefreshMap] = useState<boolean>(false);
-  const [isMapPositionDirty, setMapPositionDirty] = useState<boolean>(true);
+  const [hasRendered, setRendered] = useState<boolean>(false);
 
   const shouldClearLayer = () => {
     const refreshMap = shouldRefreshMap;
@@ -70,32 +71,34 @@ export const WorldAirQualityMap = ({
   useEffect(() => {
     const onMount = () => {
       fetchLatestData();
-      setMapPositionDirty(false);
+      setRendered(true);
     };
     onMount();
-  }, [fetchLatestData, setMapPositionDirty]);
-
+  }, [fetchLatestData]);
   return (
     <div className="world-air-quality-map">
       <MapContext.Provider value={{ mapRef, setMapRef }}>
-        {renderSelectDropdown(generateDropdownOptions(), handleParameterSelect)}
-        {isMapPositionDirty && (
-          <div className="world-air-quality-map__fetch-latest-button">
-            FETCH STUFF!
-          </div>
+        {isFetchingLatestData ||
+          (!hasRendered && (
+            <LoadingSpinner
+              classes={['world-air-quality-map__loading-spinner']}
+              subtitle={'Fetching Data...'}
+            />
+          ))}
+        {!isFetchingLatestData && hasRendered && (
+          <React.Fragment>
+            {renderSelectDropdown(
+              generateDropdownOptions(),
+              handleParameterSelect
+            )}
+            <div className="world-air-quality-map__map">
+              <Map>
+                {latestData &&
+                  renderLatestDataMarkerLayer(latestData, shouldClearLayer)}
+              </Map>
+            </div>
+          </React.Fragment>
         )}
-        {isFetchingLatestData && (
-          <LoadingSpinner
-            classes={['world-air-quality-map__loading-spinner']}
-          />
-        )}
-
-        <div className="world-air-quality-map__map">
-          <Map>
-            {latestData &&
-              renderLatestDataMarkerLayer(latestData, shouldClearLayer)}
-          </Map>
-        </div>
       </MapContext.Provider>
     </div>
   );

@@ -4,7 +4,8 @@ import {
   getFetchLatestDataPageFailure,
   getIsFetchingLatestData,
   getLatestDataByParameter,
-  getSelectedParameterFilter
+  getSelectedParameterFilter,
+  getLatestDataRange
 } from '../../ducks/selectors';
 import {
   fetchLatestData,
@@ -18,6 +19,10 @@ export const mapStateToProps = (state: IStoreState) => {
     fetchLatestDataFailure: getFetchLatestDataPageFailure(state),
     fetchLatestDataPageFailure: getIsFetchingLatestData(state),
     latestData: getLatestDataByParameter(
+      state,
+      getSelectedParameterFilter(state)
+    ),
+    latestDataRange: getLatestDataRange(
       state,
       getSelectedParameterFilter(state)
     )

@@ -1,7 +1,10 @@
 import { IFetchLatestResult } from '../api/fetchLatest';
 import { AirQualityActions, IFetchLatestDataPageSuccess } from './actions';
 import * as actionTypes from './types';
-import { ICategorizedLatestResultsMap } from '../interfaces/types';
+import {
+  CategorizedLatestResultsMap,
+  CategorizedMeasurementRangeMap
+} from '../interfaces/types';
 import { Parameter } from '../interfaces/constants';
 
 export interface IAirQualityState
@@ -21,7 +24,8 @@ export const initialWorldAirQualityMapState: IWorldAirQualityMapState = {
 export interface IAirQualityLatestResultsState {
   isFetchingLatestData: boolean;
   latestResults: IFetchLatestResult[] | null;
-  categorizedLatestResults: ICategorizedLatestResultsMap | null;
+  categorizedLatestResults: CategorizedLatestResultsMap | null;
+  categorizedMeasurementRange: CategorizedMeasurementRangeMap | null;
   fetchLatestDataFailure: boolean;
   fetchLatestDataPageFailure: boolean;
 }
@@ -29,6 +33,7 @@ export interface IAirQualityLatestResultsState {
 export const initialAirQualityLatestResultsState: IAirQualityLatestResultsState = {
   latestResults: null,
   categorizedLatestResults: null,
+  categorizedMeasurementRange: null,
   isFetchingLatestData: false,
   fetchLatestDataFailure: false,
   fetchLatestDataPageFailure: false
@@ -53,11 +58,12 @@ export const reducer = (state = initialState, action: AirQualityActions) => {
       };
 
     case actionTypes.FETCH_LATEST_DATA_SUCCESS:
-      return { ...state, isFetchingLatestData: false };
+      return { ...state, isFetchingLatestData: false, ...action.payload };
 
     case actionTypes.FETCH_LATEST_DATA_FAILURE:
       return {
         ...state,
+        ...initialAirQualityLatestResultsState,
         isFetchingLatestData: false,
         fetchLatestDataFailure: true
       };
@@ -101,15 +107,17 @@ const handleFetchLatestDataPageSucceess = (
   Object.entries(action.payload.categorizedLatestResults).forEach(
     ([parameter, categorizedResults]) => {
       if (nextState.categorizedLatestResults === null) {
-        nextState.categorizedLatestResults = {};
+        nextState.categorizedLatestResults = Object.values(Parameter).reduce(
+          (categorizedLatestResults, parameter) => {
+            categorizedLatestResults[parameter] = [];
+            return categorizedLatestResults;
+          },
+          {} as CategorizedLatestResultsMap
+        );
       }
-      if (
-        typeof nextState.categorizedLatestResults[parameter] === 'undefined'
-      ) {
-        nextState.categorizedLatestResults[parameter] = [];
-      }
-      nextState.categorizedLatestResults[parameter] = [
-        ...nextState.categorizedLatestResults[parameter],
+
+      nextState.categorizedLatestResults[parameter as Parameter] = [
+        ...nextState.categorizedLatestResults[parameter as Parameter],
         ...categorizedResults
       ];
     }

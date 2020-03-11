@@ -1,4 +1,5 @@
 import { IFetchLatestMeasurement } from '../api/fetchLatest';
+import { ParameterStrings, Parameter } from './constants';
 
 export type City = string;
 export type Country = string;
@@ -31,6 +32,10 @@ export interface ILatestMeasurementResult {
   coordinates: CoordinatesObject;
 }
 
-export interface ICategorizedLatestResultsMap {
-  [parameter: string]: ILatestMeasurementResult[];
-}
+export type CategorizedLatestResultsMap = {
+  [key in Parameter]: ILatestMeasurementResult[];
+};
+
+export type CategorizedMeasurementRangeMap = {
+  [key in Parameter]: { min: number; max: number };
+};

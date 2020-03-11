@@ -1,13 +1,13 @@
-import { IFetchLatestResult } from '../../api/fetchLatest';
+import { IFetchLatestResult } from '../../../api/fetchLatest';
 import {
-  ICategorizedLatestResultsMap,
+  CategorizedLatestResultsMap,
   ILatestMeasurementResult
-} from '../../interfaces/types';
+} from '../../../interfaces/types';
 
 export const extractDataByParameter = (
   results: IFetchLatestResult[]
-): ICategorizedLatestResultsMap => {
-  const measurementDataMap: ICategorizedLatestResultsMap = results.reduce(
+): CategorizedLatestResultsMap => {
+  const measurementDataMap: CategorizedLatestResultsMap = results.reduce(
     (dataMap, { measurements, ...rest }) => {
       measurements.forEach(measurement => {
         if (typeof dataMap[measurement.parameter] === 'undefined') {
@@ -22,7 +22,7 @@ export const extractDataByParameter = (
 
       return dataMap;
     },
-    {} as ICategorizedLatestResultsMap
+    {} as CategorizedLatestResultsMap
   );
 
   return measurementDataMap;

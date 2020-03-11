@@ -3,7 +3,8 @@ import { IFetchLatestResult, IFetchLatestParams } from '../api/fetchLatest';
 import {
   Coordinates,
   Radius,
-  ICategorizedLatestResultsMap
+  CategorizedLatestResultsMap,
+  CategorizedMeasurementRangeMap
 } from '../interfaces/types';
 import { Parameter } from '../interfaces/constants';
 export interface ISetIsFetchingData {
@@ -43,13 +44,19 @@ export interface IFetchLatestData {
 export const fetchLatestData = (): IFetchLatestData => ({
   type: actionTypes.FETCH_LATEST_DATA
 });
-
+export interface IFetchLatestDataSuccessArgs {
+  categorizedMeasurementRange: CategorizedMeasurementRangeMap;
+}
 export interface IFetchLatestDataSuccess {
   type: actionTypes.FETCH_LATEST_DATA_SUCCESS;
+  payload: IFetchLatestDataSuccessArgs;
 }
 
-export const fetchLatestDataSuccess = (): IFetchLatestDataSuccess => ({
-  type: actionTypes.FETCH_LATEST_DATA_SUCCESS
+export const fetchLatestDataSuccess = (
+  payload: IFetchLatestDataSuccessArgs
+): IFetchLatestDataSuccess => ({
+  type: actionTypes.FETCH_LATEST_DATA_SUCCESS,
+  payload
 });
 
 export interface IFetchLatestDataFailure {
@@ -75,7 +82,7 @@ export const fetchLatestDataPage = (
 
 export interface IFetchLatestDataPageSuccessArgs {
   latestResults: IFetchLatestResult[];
-  categorizedLatestResults: ICategorizedLatestResultsMap;
+  categorizedLatestResults: CategorizedLatestResultsMap;
 }
 
 export interface IFetchLatestDataPageSuccess {
