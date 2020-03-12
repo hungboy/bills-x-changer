@@ -1,19 +1,14 @@
 import { createContext } from 'react';
+import { Map } from 'leaflet';
 
 export interface IMapContext {
-  mapRef: React.RefObject<any> | null;
-  setMapRef: (ref: any) => void;
-  // layerRef: React.RefObject<any> | null;
-  // setLayerRef: (ref: any) => void;
-  // shouldClearLayer: () => boolean;
+  mapRef: React.MutableRefObject<Map | undefined> | null;
+  setMapRef: (ref: Map) => void;
 }
 
 export const DEFAULT_MAP_CONTEXT: IMapContext = {
   mapRef: null,
-  setMapRef: (ref: any) => {}
-  // layerRef: null,
-  // setLayerRef: (ref: any) => {},
-  // shouldClearLayer: () => false
+  setMapRef: (ref: Map) => {}
 };
 
 export const context = createContext(DEFAULT_MAP_CONTEXT);

@@ -6,8 +6,13 @@
 }
 .world-air-quality-map__map {
   height: 700px;
+  position: relative;
 }
 
 .world-air-quality-map__latest-data {
   height: 700px;
+}
+
+.world-air-quality-map__parameter-selector {
+  justify-self: center;
 }

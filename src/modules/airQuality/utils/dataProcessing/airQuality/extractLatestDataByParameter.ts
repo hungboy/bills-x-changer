@@ -13,11 +13,13 @@ export const extractDataByParameter = (
         if (typeof dataMap[measurement.parameter] === 'undefined') {
           dataMap[measurement.parameter] = [];
         }
-        const measurementData = { ...rest, measurement };
+        if (measurement.value > 0) {
+          const measurementData = { ...rest, measurement };
 
-        dataMap[measurement.parameter].push(
-          measurementData as ILatestMeasurementResult
-        );
+          dataMap[measurement.parameter].push(
+            measurementData as ILatestMeasurementResult
+          );
+        }
       });
 
       return dataMap;

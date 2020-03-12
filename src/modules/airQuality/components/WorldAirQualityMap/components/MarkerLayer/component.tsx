@@ -45,8 +45,8 @@ export const MarkerLayer = <T extends {}>({
     if (layerRef.current ?? false) {
       return;
     }
-    if (mapRef?.current ?? false) {
-      layerRef.current = L.layerGroup().addTo(mapRef?.current);
+    if (mapRef !== null && typeof mapRef.current !== 'undefined') {
+      layerRef.current = L.layerGroup().addTo(mapRef.current);
     }
   }, [layerRef, markers, mapRef]);
 

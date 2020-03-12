@@ -37,5 +37,5 @@ export type CategorizedLatestResultsMap = {
 };
 
 export type CategorizedMeasurementRangeMap = {
-  [key in Parameter]: { min: number; max: number };
+  [key in Parameter]: { min: number; max: number; unit: string };
 };

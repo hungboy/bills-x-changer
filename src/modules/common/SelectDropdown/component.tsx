@@ -99,9 +99,9 @@ export const SelectDropdown = <T extends {}>({
         ? renderHeader(selectedOption[1])
         : selectedOption[1].label;
     } else if (options ?? true) {
-      return nullString ?? DEFAULT_EMPTY_STRING;
+      return emptyString ?? DEFAULT_EMPTY_STRING;
     } else {
-      return emptyString ?? DEFAULT_NULL_STRING;
+      return nullString ?? DEFAULT_NULL_STRING;
     }
   };
 
@@ -119,13 +119,14 @@ export const SelectDropdown = <T extends {}>({
     >
       <div className={clsx('select-dropdown', classes)}>
         <div
-          className="select-dropdown_header"
+          className={clsx(
+            'select-dropdown_header',
+            isOpen ? 'select-dropdown_header--selected' : []
+          )}
           onClick={event => toggleDropdown(event)}
           ref={ref => {
             selectorRef.current = ref;
           }}
-          onFocus={event => setOpen(true)}
-          onBlur={event => setOpen(false)}
         >
           <div className="select-drop-down_header_title">{headerTitle}</div>
         </div>

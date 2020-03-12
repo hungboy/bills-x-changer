@@ -19,3 +19,12 @@ $brown-3: sienna;
 $brown-4: rgb(153, 81, 81);
 
 $white: white;
+$black: black;
+
+:export {
+  red: $red-4;
+  blue: $blue-1;
+  green: $green-2;
+  white: $white;
+  black: $black;
+}
