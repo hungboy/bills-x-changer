@@ -6,7 +6,8 @@ import {
 import {
   ToastVariant,
   GenerateContentsFunction,
-  ToastState
+  ToastState,
+  OnCloseFunction
 } from '../../types';
 import colors from '../../../../../styles/colors.module.scss';
 import './styles.scss';
@@ -14,12 +15,11 @@ import './styles.scss';
 const DEFAULT_TRANSITION_DURATION_MS = 500;
 const DEFAULT_TOAST_GUTTER_PX = 10;
 const DEFAULT_WRAPPER_HEIGHT = 'auto';
-export type OnCloseFunction = (toastId: string) => void;
 
 export interface IToastProps {
   toastId: string;
-  contents?: GenerateContentsFunction;
-  variant?: ToastVariant;
+  contents: GenerateContentsFunction;
+  variant: ToastVariant;
   onClose?: OnCloseFunction;
   state?: ToastState;
 }
@@ -50,12 +50,7 @@ export const calculateToastStyle = (variant: ToastVariant) => {
   };
 };
 
-export const Toast = ({
-  toastId,
-  contents = id => 'Sample Toast Notification.........',
-  variant = 'info',
-  state
-}: IToastProps) => {
+export const Toast = ({ toastId, contents, variant, state }: IToastProps) => {
   const context = useContext<IToastNotificationContext | null>(
     ToastNotificationContext
   );

@@ -34,9 +34,13 @@ export enum ToastState {
 export type UpdateToastStateFunction = (id: ToastId, state: ToastState) => void;
 
 export type ToastNotificationMap = {
-  [id in ToastId]: {
-    state: ToastState;
-    contents: GenerateContentsFunction;
-    variant: ToastVariant;
-  };
+  [id in ToastId]: ToastNotification;
 };
+
+export type ToastNotification = {
+  state: ToastState;
+  contents: GenerateContentsFunction;
+  variant: ToastVariant;
+};
+
+export type OnCloseFunction = (toastId: string) => void;

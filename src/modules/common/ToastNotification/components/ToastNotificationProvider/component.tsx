@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect, useContext } from 'react';
+import React, { createContext, useEffect, useContext, useReducer } from 'react';
 import { createPortal } from 'react-dom';
 import { ToastNotificationContainer, Toast } from '..';
 import {
@@ -13,6 +13,19 @@ import {
   ToastState,
   ToastVariant
 } from '../../types';
+import {
+  DEFAULT_GENERATE_CONTENTS_FUNCTION,
+  DEFAULT_TOAST_VARIANT
+} from '../../constants';
+
+import {
+  addToastAction,
+  updateToastsAction,
+  removeToastsAction,
+  reducer,
+  INITIAL_STATE
+} from '../../reducer';
+import { generateUEID } from '../../../../../utils/ueid';
 
 export const ToastNotificationContext = createContext<IToastNotificationContext | null>(
   null
@@ -33,19 +46,11 @@ export const ToastNotificationProvider = ({
   placement = 'top-left',
   children
 }: IToastNotificationProviderProps) => {
-  const [nextId, setNextId] = useState<number>(0);
-  const incrementNextId = () => setNextId(nextId + 1);
-
-  const [toastNotifications, setToastNotifications] = useState<
-    ToastNotificationMap
-  >({});
+  const [{ toastNotifications }, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   const updateToastNotificationState = (id: ToastId, state: ToastState) => {
     if (toastNotifications[id]) {
-      setToastNotifications({
-        ...toastNotifications,
-        [id]: { ...toastNotifications[id], state }
-      });
+      dispatch(updateToastsAction([{ id, state }]));
     }
   };
 
@@ -56,48 +61,47 @@ export const ToastNotificationProvider = ({
     contents?: GenerateContentsFunction;
     variant?: ToastVariant;
   }) => {
-    const id = nextId;
+    const id = generateUEID();
     const notification = {
-      [id]: { contents, variant, state: ToastState.ENTERING }
+      contents: contents ?? DEFAULT_GENERATE_CONTENTS_FUNCTION,
+      variant: variant ?? DEFAULT_TOAST_VARIANT,
+      state: ToastState.ENTERING
     };
-    setToastNotifications({ ...toastNotifications, ...notification });
-    incrementNextId();
+
+    dispatch(addToastAction({ id, notification }));
+
     return `${id}`;
   };
 
   const removeToastNotification = (id: ToastId) => {
     if (toastNotifications[id]?.state) {
-      setToastNotifications({
-        ...toastNotifications,
-        [id]: { ...toastNotifications[id], state: ToastState.CLOSING }
-      });
+      dispatch(updateToastsAction([{ id, state: ToastState.CLOSING }]));
     } else {
       console.log("Toast doesn't exist.");
     }
   };
 
   const removeAllNotifications = () => {
-    const nextNotifications = { ...toastNotifications };
-    Object.entries(toastNotifications).forEach(([id, notfication]) => {
-      nextNotifications[id].state = ToastState.CLOSING;
-    });
-    setToastNotifications({ ...nextNotifications });
+    const updatedToasts = Object.entries(toastNotifications).map(
+      ([id, notfication]) => ({
+        id,
+        state: ToastState.CLOSING
+      })
+    );
+
+    dispatch(updateToastsAction(updatedToasts));
   };
 
+  //Filter Closed notifications
   useEffect(() => {
-    const nextNotifications = { ...toastNotifications };
+    const closedNotifications = Object.entries(toastNotifications)
+      .filter(([id, notification]) => notification.state === ToastState.CLOSED)
+      .map(([id]) => id);
 
-    const closedNotifications = Object.entries(toastNotifications).filter(
-      ([id, notification]) => notification.state === ToastState.CLOSED
-    );
     if (closedNotifications.length > 0) {
-      closedNotifications.forEach(([id, notfication]) => {
-        delete nextNotifications[id];
-      });
-
-      setToastNotifications({ ...nextNotifications });
+      removeToastsAction({ ids: closedNotifications });
     }
-  }, [toastNotifications, setToastNotifications]);
+  }, [toastNotifications]);
 
   let portalNode = parentNode ?? window.document.body;
 
