@@ -1,0 +1,40 @@
+@import '../../../styles/colors.module.scss';
+@import '../../../styles/fonts.module.scss';
+@use 'sass:color';
+
+@mixin button-style($color) {
+  @include colorize($color);
+  &:hover {
+    @include colorize(desaturate($color, 20));
+  }
+  &:active {
+    @include colorize(saturate($color, 20));
+  }
+}
+
+@mixin colorize($color) {
+  background-color: $color;
+  border-color: $color;
+}
+
+button.button-component {
+  padding: 10px;
+  border-radius: 5px;
+  @include font-family();
+  @include font-size();
+  @include font-weight();
+
+  &:focus {
+    outline: 0;
+  }
+
+  &.primary {
+    @include button-style($blue-1);
+  }
+  &.secondary {
+    @include button-style($red-1);
+  }
+  &.tertiary {
+    @include button-style($green-1);
+  }
+}

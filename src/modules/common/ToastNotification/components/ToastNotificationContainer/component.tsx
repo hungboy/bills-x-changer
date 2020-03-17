@@ -26,6 +26,7 @@ export const ToastNotificationContainer = ({
         position: 'fixed',
         boxSizing: 'border-box',
         zIndex: 1000,
+        padding: '10px',
         ...PLACEMENTS[placement]
       }}
     >
